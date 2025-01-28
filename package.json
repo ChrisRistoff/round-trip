@@ -1,5 +1,28 @@
 {
+  "name": "stuff",
+  "version": "1.0.0",
+  "description": "stuff",
+  "main": "index.js",
+  "scripts": {
+    "start": "ts-node src/index.ts",
+    "build": "tsc",
+    "dev": "ts-node-dev --respawn --transpileOnly src/index.ts"
+  },
   "dependencies": {
-    "axios": "^1.7.9"
-  }
+    "axios": "^1.7.9",
+    "p-limit": "^6.2.0"
+  },
+  "devDependencies": {
+    "@types/p-limit": "^2.1.0",
+    "typescript": "^5.0.0",
+    "ts-node": "^10.9.1",
+    "ts-node-dev": "^2.0.0"
+  },
+  "type": "module",
+  "engines": {
+    "node": ">=16.0.0"
+  },
+  "author": "Your Name",
+  "license": "MIT"
 }
+
