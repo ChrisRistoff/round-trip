@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-interface TotalTime {
+type TotalTime = {
     totalTime: number,
     totalCalls: number,
 }
@@ -18,26 +18,32 @@ async function measureRoundTripTime(url: string): Promise<number> {
     }
 }
 
-async function main(url: string, numberOfAttempts: number): Promise<TotalTime> {
-    let totalTime: number = 0;
-    let errors: number = 0;
+async function main(urls: string[], numberOfAttempts: number): Promise<TotalTime[]> {
+    const urlsLadderArray: TotalTime[] = []
 
-    for (let i = 0; i < numberOfAttempts; i++) {
-        const res = await measureRoundTripTime(url);
+    for (let i = 0; i < urls.length; i++) {
+        let totalTime: number = 0;
+        let errors: number = 0;
 
-        if (res === -1) {
-            errors += 1;
-        } else {
-            totalTime += res;
+        for (let j = 0; j < numberOfAttempts; j++) {
+            const res = await measureRoundTripTime(urls[i]);
+
+            if (res === -1) {
+                errors += 1;
+            } else {
+                totalTime += res;
+            }
         }
+
+        urlsLadderArray.push({
+            totalTime,
+            totalCalls: numberOfAttempts - errors,
+        })
     }
 
-    return {
-        totalTime: totalTime / (100 - errors),
-        totalCalls: 100 - errors
-    }
+    return urlsLadderArray.sort((a, b) => a.totalTime - b.totalTime);
 }
 
 const url = 'https://api.coinbase.com/v2/prices/BTC-USD/spot';
 
-main(url, 100).then(res => console.log('average time is: ', res));
+main([url], 100).then(res => console.log('average time is: ', res));
